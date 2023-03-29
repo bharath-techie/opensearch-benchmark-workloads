@@ -14,7 +14,7 @@
               "index.refresh_interval": "30s",
               "index.translog.flush_threshold_size": "4g",
               "index.number_of_shards": {{number_of_shards | default(1)}},
-              "index.number_of_replicas": {{number_of_replicas | default(2)}},
+              "index.number_of_replicas": {{number_of_replicas | default(2)}}
       }{%- endif %}
           }
         },
