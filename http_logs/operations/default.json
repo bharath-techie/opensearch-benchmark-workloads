@@ -188,47 +188,45 @@
         }
       }
     },
-        {
-        "name": "hourly_agg-1",
-        "operation-type": "search",
-    "index": "logs-*",
-    "body": {
-    "size": 0,
-    "aggs": {
-    "by_hour": {
-    "date_histogram": {
-    "field": "@timestamp",
-    "calendar_interval": "hour"
-    }
-    }
-    }
-    }
+    {
+      "name": "hourly_agg-1",
+      "operation-type": "search",
+      "index": "logs-*",
+      "body": {
+        "size": 0,
+        "aggs": {
+          "by_hour": {
+            "date_histogram": {
+              "field": "@timestamp",
+              "calendar_interval": "hour"
+            }
+          }
+        }
+      }
     },
     {
-    "name": "hourly_agg-2",
-    "operation-type": "search",
-    "index": "logs-*",
-    "body": {
-    {
-    "query": {
-    "startree": {
-    "groupby": [
-    "hour"
-    ]
-    }
-    },
-    "size": 0,
-    "aggs": {
-    "abc": {
-    "startree": {
-    "groupby": [
-    "hour"
-    ]
-    }
-    }
-    }
-    }
-    }
+      "name": "hourly_agg-2",
+      "operation-type": "search",
+      "index": "logs-*",
+      "body": {
+        "query": {
+          "startree": {
+              "groupby": [
+                  "hour"
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "hour"
+                  ]
+              }
+          }
+      }
+      }
     },
     {
       "name": "scroll",
