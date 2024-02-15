@@ -173,128 +173,174 @@
       ]
     },
     {
-    "name": "400s-in-range-agg",
-    "operation-type": "search",
-    "index": "elb*",
-    "body": {
-    "size": 0,
-    "query": {
-    "bool": {
-    "must": [
-    {
-    "range": {
-    "@timestamp": {
-    "gte": "2023-10-01T00:00:00Z",
-    "lt": "2023-10-02T00:00:00Z"
-    }
-    }
+      "name": "400s-in-range-agg",
+      "operation-type": "search",
+      "index": "elb*",
+      "body": {
+        "size": 0,
+        "query": {
+          "startree": {
+            "groupby": [
+              "elb_status"
+            ],
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "elb_status": "404"
+                      }
+                    },
+                    {
+                      "term": {
+                        "day": "1696118400000"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "abc": {
+            "startree": {
+              "groupby": [
+                "elb_status"
+              ],
+              "metrics": [
+                "elb_status_sum"
+              ]
+            }
+          }
+        }
+      }
     },
     {
-    "match": {
-    "elb_status": "404"
-    }
-    }
-    ]
-    }
-    },
-    "aggs": {
-    "response_codes": {
-    "terms": {
-    "field": "elb_status",
-    "size": 100
-    }
-    }
-    }
-    }
-    },
-    {
-    "name": "200s-in-range-agg",
-    "operation-type": "search",
-    "index": "elb*",
-    "body": {
-    "size": 0,
-    "query": {
-    "bool": {
-    "must": [
-    {
-    "range": {
-    "@timestamp": {
-    "gte": "2023-10-01T00:00:00Z",
-    "lt": "2023-10-02T00:00:00Z"
-    }
-    }
-    },
-    {
-    "match": {
-    "elb_status": "200"
-    }
-    }
-    ]
-    }
-    },
-    "aggs": {
-    "response_codes": {
-    "terms": {
-    "field": "elb_status",
-    "size": 100
-    }
-    }
-    }
-    }
+      "name": "200s-in-range-agg",
+      "operation-type": "search",
+      "index": "elb*",
+      "body": {
+        "size": 0,
+        "query": {
+          "startree": {
+            "groupby": [
+              "elb_status"
+            ],
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "elb_status": "200"
+                      }
+                    },
+                    {
+                      "term": {
+                        "day": "1696118400000"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "abc": {
+            "startree": {
+              "groupby": [
+                "elb_status"
+              ],
+              "metrics": [
+                "elb_status_sum"
+              ]
+            }
+          }
+        }
+      }
     },
     {
-    "name": "200s-agg",
-    "operation-type": "search",
-    "index": "elb*",
-    "body": {
-    "size": 0,
-    "query": {
-    "bool": {
-    "must": [
-    {
-    "match": {
-    "elb_status": "200"
-    }
-    }
-    ]
-    }
+      "name": "400s-agg",
+      "operation-type": "search",
+      "index": "elb*",
+      "body": {
+        "size": 0,
+        "query": {
+          "startree": {
+            "groupby": [
+              "elb_status"
+            ],
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "elb_status": "404"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "abc": {
+            "startree": {
+              "groupby": [
+                "elb_status"
+              ],
+              "metrics": [
+                "elb_status_sum"
+              ]
+            }
+          }
+        }
+      }
     },
-    "aggs": {
-    "response_codes": {
-    "terms": {
-    "field": "elb_status",
-    "size": 100
-    }
-    }
-    }
-    }
-    },
     {
-    "name": "400s-agg",
-    "operation-type": "search",
-    "index": "elb*",
-    "body": {
-    "size": 0,
-    "query": {
-    "bool": {
-    "must": [
-    {
-    "match": {
-    "elb_status": "404"
-    }
-    }
-    ]
-    }
-    },
-    "aggs": {
-    "response_codes": {
-    "terms": {
-    "field": "elb_status",
-    "size": 100
-    }
-    }
-    }
-    }
+      "name": "200s-agg",
+      "operation-type": "search",
+      "index": "elb*",
+      "body": {
+        "size": 0,
+        "query": {
+          "startree": {
+            "groupby": [
+              "elb_status"
+            ],
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "elb_status": "200"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "abc": {
+            "startree": {
+              "groupby": [
+                "elb_status"
+              ],
+              "metrics": [
+                "elb_status_sum"
+              ]
+            }
+          }
+        }
+      }
     },
     {
       "name": "hourly_agg",
