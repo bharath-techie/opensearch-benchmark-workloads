@@ -71,10 +71,10 @@
   },
     {
       "operation": "hourly_agg",
-      "warmup-iterations": 1,
-      "iterations": 1
+      "warmup-iterations": 50,
+      "iterations": 100
     {%- if not target_throughput %}
-  ,"target-throughput": 0.2
+  ,"target-throughput": 5
     {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
     {%- else %}
   ,"target-throughput": {{ target_throughput | tojson }}
