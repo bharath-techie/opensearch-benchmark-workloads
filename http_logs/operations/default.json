@@ -347,15 +347,28 @@
       "operation-type": "search",
       "index": "elb-*",
       "body": {
-        "size": 0,
-        "aggs": {
-          "by_hour": {
-            "date_histogram": {
-              "field": "@timestamp",
-              "calendar_interval": "hour"
-            }
-          }
-        }
+    "query": {
+    "startree": {
+    "groupby": [
+    "elb_status",
+    "hour"
+    ]
+    }
+    },
+    "size": 0,
+    "aggs": {
+    "abc": {
+    "startree": {
+    "groupby": [
+    "elb_status",
+    "hour"
+    ],
+    "metrics": [
+    "elb_status_sum"
+    ]
+    }
+    }
+    }
       }
     },
     {
