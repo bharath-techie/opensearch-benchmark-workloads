@@ -1,398 +1,665 @@
-    {
-      "name": "index-append",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "corpora": "http_logs"
-    },
-    {
-      "name": "index-append-with-ingest-baseline-pipeline",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "pipeline": "http-log-baseline-pipeline",
-      "corpora": "http_logs"
-    },
-    {
-      "name": "index-append-with-ingest-grok-pipeline",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "pipeline": "http-log-grok-pipeline",
-      "corpora": "http_logs_unparsed"
-    },
-    {
-      "name": "index-append-with-ingest-geoip-pipeline",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "pipeline": "http-log-geoip-pipeline",
-      "corpora": "http_logs"
-    },
-    {
-      "name": "index-append-with-timestamp-pipeline",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "pipeline": "timestamp-pipeline",
-      "corpora": "http_logs_unparsed"
-    },
-    {
-      "name": "update",
-      "operation-type": "bulk",
-      "bulk-size": {{bulk_size | default(5000)}},
-      "ingest-percentage": {{ingest_percentage | default(100)}},
-      "conflicts": "{{conflicts | default('random')}}",
-      "on-conflict": "{{on_conflict | default('update')}}",
-      "conflict-probability": {{conflict_probability | default(25)}},
-      "recency": {{recency | default(0)}},
-      "corpora": "http_logs"
-    },
-    {
-      "name": "default",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+{
+  "name": "index-append",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "corpora": "http_logs"
+},
+{
+  "name": "index-append-with-ingest-baseline-pipeline",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "pipeline": "http-log-baseline-pipeline",
+  "corpora": "http_logs"
+},
+{
+  "name": "index-append-with-ingest-grok-pipeline",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "pipeline": "http-log-grok-pipeline",
+  "corpora": "http_logs_unparsed"
+},
+{
+  "name": "index-append-with-ingest-geoip-pipeline",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "pipeline": "http-log-geoip-pipeline",
+  "corpora": "http_logs"
+},
+{
+  "name": "index-append-with-timestamp-pipeline",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "pipeline": "timestamp-pipeline",
+  "corpora": "http_logs_unparsed"
+},
+{
+  "name": "update",
+  "operation-type": "bulk",
+  "bulk-size": {{bulk_size | default(5000)}},
+  "ingest-percentage": {{ingest_percentage | default(100)}},
+  "conflicts": "{{conflicts | default('random')}}",
+  "on-conflict": "{{on_conflict | default('update')}}",
+  "conflict-probability": {{conflict_probability | default(25)}},
+  "recency": {{recency | default(0)}},
+  "corpora": "http_logs"
+},
+{
+  "name": "default",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "match_all": {}
-        }
       }
-    },
-    {
-      "name": "term",
-      "operation-type": "search",
-      "index": "logs-*",
-      "request-timeout": 7200,
-      "body": {
-        "query": {
+  }
+},
+{
+  "name": "term",
+  "operation-type": "search",
+  "index": "logs-*",
+  "request-timeout": 7200,
+  "body": {
+      "query": {
           "term": {
               "request.raw": {
-                "value": "GET / HTTP/1.0"
+                  "value": "GET / HTTP/1.0"
               }
           }
-        }
-      },
-      "detailed-results": true,
-      "assertions": [
-        {
+      }
+  },
+  "detailed-results": true,
+  "assertions": [
+      {
           "property": "hits",
           "condition": "==",
           "value": 10000
-        }
-      ]
-    },
-    {
-      "name": "range",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+      }
+  ]
+},
+{
+  "name": "range",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "range": {
-            "@timestamp": {
-              "gte": "now-{{'15-05-1998' | days_ago(now)}}d/d",
-              "lt": "now/d"
-            }
+              "@timestamp": {
+                  "gte": "now-{{'15-05-1998' | days_ago(now)}}d/d",
+                  "lt": "now/d"
+              }
           }
-        }
-      },
-      "detailed-results": true,
-      "assertions": [
-        {
+      }
+  },
+  "detailed-results": true,
+  "assertions": [
+      {
           "property": "hits",
           "condition": "==",
           "value": 10000
-        }
-      ]
-    },
-    {
-      "name": "200s-in-range",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+      }
+  ]
+},
+{
+  "name": "200s-in-range",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "bool": {
-            "must": [
-              {
-                "range": {
-                  "@timestamp": {
-                    "gte": "1998-05-01T00:00:00Z",
-                    "lt": "1998-05-02T00:00:00Z"
+              "must": [
+                  {
+                      "range": {
+                          "@timestamp": {
+                              "gte": "1998-05-01T00:00:00Z",
+                              "lt": "1998-05-02T00:00:00Z"
+                          }
+                      }
+                  },
+                  {
+                      "match": {
+                          "status": "200"
+                      }
                   }
-                }
-              },
-              {
-                "match": {
-                  "status": "200"
-                }
-              }
-            ]
+              ]
           }
-        }
-      },
-      "detailed-results": true,
-      "assertions": [
-        {
+      }
+  },
+  "detailed-results": true,
+  "assertions": [
+      {
           "property": "hits",
           "condition": "==",
           "value": 10000
-        }
-      ]
-    },
-    {
-      "name": "400s-in-range",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+      }
+  ]
+},
+{
+  "name": "400s-in-range",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "bool": {
-            "must": [
-              {
-                "range": {
-                  "@timestamp": {
-                    "gte": "1998-05-01T00:00:00Z",
-                    "lt": "1998-05-02T00:00:00Z"
+              "must": [
+                  {
+                      "range": {
+                          "@timestamp": {
+                              "gte": "1998-05-01T00:00:00Z",
+                              "lt": "1998-05-02T00:00:00Z"
+                          }
+                      }
+                  },
+                  {
+                      "match": {
+                          "status": "400"
+                      }
                   }
-                }
-              },
-              {
-                "match": {
-                  "status": "400"
-                }
-              }
-            ]
+              ]
           }
-        }
-      },
-      "detailed-results": true,
-      "assertions": [
-        {
+      }
+  },
+  "detailed-results": true,
+  "assertions": [
+      {
           "property": "hits",
           "condition": "==",
           "value": 20
-        }
-      ]
-    },
-    {
-      "name": "400s-in-range-agg",
-      "operation-type": "search",
-      "index": "elb*",
-      "body": {
-        "size": 0,
-        "query": {
+      }
+  ]
+},
+{
+  "name": "400s-in-range-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "size": 0,
+      "query": {
           "startree": {
-            "groupby": [
-              "elb_status"
-            ],
-            "filter": [
-              {
-                "bool": {
-                  "should": [
-                    {
-                      "term": {
-                        "elb_status": "404"
-                      }
-                    },
-                    {
-                      "term": {
-                        "day": "1696118400000"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        "aggs": {
-          "abc": {
-            "startree": {
               "groupby": [
-                "elb_status"
+                  "elb_status"
               ],
-              "metrics": [
-                "elb_status_sum"
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "elb_status": "404"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "day": "1696118400000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
               ]
-            }
           }
-        }
+      },
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "elb_status"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
       }
-    },
-    {
-      "name": "200s-in-range-agg",
-      "operation-type": "search",
-      "index": "elb*",
-      "body": {
-        "size": 0,
-        "query": {
+  }
+},
+{
+  "name": "200s-in-range-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "size": 0,
+      "query": {
           "startree": {
-            "groupby": [
-              "elb_status"
-            ],
-            "filter": [
-              {
-                "bool": {
-                  "should": [
-                    {
-                      "term": {
-                        "elb_status": "200"
-                      }
-                    },
-                    {
-                      "term": {
-                        "day": "1696118400000"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        "aggs": {
-          "abc": {
-            "startree": {
               "groupby": [
-                "elb_status"
+                  "elb_status"
               ],
-              "metrics": [
-                "elb_status_sum"
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "elb_status": "200"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "day": "1696118400000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
               ]
-            }
           }
-        }
+      },
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "elb_status"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
       }
-    },
-    {
-      "name": "400s-agg",
-      "operation-type": "search",
-      "index": "elb*",
-      "body": {
-        "size": 0,
-        "query": {
+  }
+},
+{
+  "name": "400s-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "size": 0,
+      "query": {
           "startree": {
-            "groupby": [
-              "elb_status"
-            ],
-            "filter": [
-              {
-                "bool": {
-                  "should": [
-                    {
-                      "term": {
-                        "elb_status": "404"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        "aggs": {
-          "abc": {
-            "startree": {
               "groupby": [
-                "elb_status"
+                  "elb_status"
               ],
-              "metrics": [
-                "elb_status_sum"
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "elb_status": "404"
+                                  }
+                              }
+                          ]
+                      }
+                  }
               ]
-            }
           }
-        }
+      },
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "elb_status"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
       }
-    },
-    {
-      "name": "200s-agg",
-      "operation-type": "search",
-      "index": "elb*",
-      "body": {
-        "size": 0,
-        "query": {
+  }
+},
+{
+  "name": "200s-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "size": 0,
+      "query": {
           "startree": {
-            "groupby": [
-              "elb_status"
-            ],
-            "filter": [
-              {
-                "bool": {
-                  "should": [
-                    {
-                      "term": {
-                        "elb_status": "200"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        "aggs": {
-          "abc": {
-            "startree": {
               "groupby": [
-                "elb_status"
+                  "elb_status"
               ],
-              "metrics": [
-                "elb_status_sum"
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "elb_status": "200"
+                                  }
+                              }
+                          ]
+                      }
+                  }
               ]
-            }
           }
-        }
+      },
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "elb_status"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
       }
-    },
-    {
-      "name": "hourly_agg",
-      "operation-type": "search",
-      "index": "elb-*",
-      "body": {
-    "query": {
-    "startree": {
-    "groupby": [
-    "elb_status",
-    "hour"
-    ]
-    }
-    },
-    "size": 0,
-    "aggs": {
-    "abc": {
-    "startree": {
-    "groupby": [
-    "elb_status",
-    "hour"
-    ],
-    "metrics": [
-    "elb_status_sum"
-    ]
-    }
-    }
-    }
+  }
+},
+{
+  "name": "exact-term-minute-sum-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "elb_status"
+              ],
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "target_ip": "172.16.62.228"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "minute": "1706104680000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip",
+                      "minute"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
       }
-    },
-    {
-      "name": "hourly_agg-1",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "size": 0,
-        "aggs": {
+  }
+},
+{
+  "name": "exact-term-minute-query-sum-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "elb_status"
+              ],
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "target_ip": "172.16.62.228"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "minute": "1706104680000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip",
+                      "minute"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "exact-term-hour-sum-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "elb_status"
+              ],
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "target_ip": "172.16.62.228"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "hour": "1706101200000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip",
+                      "hour"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "exact-term-hour-query-sum-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "elb_status"
+              ],
+              "filter": [
+                  {
+                      "bool": {
+                          "should": [
+                              {
+                                  "term": {
+                                      "target_ip": "172.16.62.228"
+                                  }
+                              },
+                              {
+                                  "term": {
+                                      "hour": "1706101200000"
+                                  }
+                              }
+                          ]
+                      }
+                  }
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip",
+                      "hour"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "terms-agg-clientip",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "client_ip"
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "client_ip"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "terms-agg-targetip",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "target_ip"
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "multi-terms-sum-agg",
+  "operation-type": "search",
+  "index": "elb*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "target_ip",
+                  "client_ip"
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "target_ip",
+                      "client_ip"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "hourly_agg",
+  "operation-type": "search",
+  "index": "elb-*",
+  "body": {
+      "query": {
+          "startree": {
+              "groupby": [
+                  "elb_status",
+                  "hour"
+              ]
+          }
+      },
+      "size": 0,
+      "aggs": {
+          "abc": {
+              "startree": {
+                  "groupby": [
+                      "elb_status",
+                      "hour"
+                  ],
+                  "metrics": [
+                      "elb_status_sum"
+                  ]
+              }
+          }
+      }
+  }
+},
+{
+  "name": "hourly_agg-1",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "size": 0,
+      "aggs": {
           "by_hour": {
-            "date_histogram": {
-              "field": "@timestamp",
-              "calendar_interval": "hour"
-            }
+              "date_histogram": {
+                  "field": "@timestamp",
+                  "calendar_interval": "hour"
+              }
           }
-        }
       }
-    },
-    {
-      "name": "hourly_agg-2",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+  }
+},
+{
+  "name": "hourly_agg-2",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "startree": {
               "groupby": [
                   "hour"
@@ -409,145 +676,157 @@
               }
           }
       }
-      }
-    },
-    {
-      "name": "scroll",
-      "operation-type": "search",
-      "index": "logs-*",
-      "pages": 25,
-      "results-per-page": 1000,
-      "body": {
-        "query": {
+  }
+},
+{
+  "name": "scroll",
+  "operation-type": "search",
+  "index": "logs-*",
+  "pages": 25,
+  "results-per-page": 1000,
+  "body": {
+      "query": {
           "match_all": {}
-        }
       }
-    },
-    {
-      "name": "desc_sort_timestamp",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
+  }
+},
+{
+  "name": "desc_sort_timestamp",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
           "match_all": {}
-        },
-        "sort" : [
-          {"@timestamp" : "desc"}
-        ]
-      }
-    },
-    {
-      "name": "desc_sort_with_after_timestamp",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "track_total_hits": false,
-        "query": {
-          "match_all": {}
-        },
-        "sort" : [
-          {"@timestamp" : "desc"}
-        ],
-        "search_after": ["1998-06-10"]
-      }
-    },
-    {
-      "name": "asc_sort_timestamp",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "query": {
-          "match_all": {}
-        },
-        "sort" : [
-          {"@timestamp" : "asc"}
-        ]
-      }
-    },
-    {
-      "name": "asc_sort_with_after_timestamp",
-      "operation-type": "search",
-      "index": "logs-*",
-      "body": {
-        "track_total_hits": false,
-        "query": {
-          "match_all": {}
-        },
-        "sort" : [
-          {"@timestamp" : "asc"}
-        ],
-        "search_after": ["1998-06-10"]
-      }
-    },
-    {
-      "name": "create-http-log-baseline-pipeline",
-      "operation-type": "put-pipeline",
-      "id": "http-log-baseline-pipeline",
-      "body": {
-        "description": "Process an the documents with a processor that does nothing. Baseline for overhead of pipeline.",
-        "processors": [
+      },
+      "sort": [
           {
-            "uppercase": {
-              "field": "doesnotexist",
-              "ignore_missing": true
-            }
+              "@timestamp": "desc"
           }
-        ]
-      }
-    },
-    {
-      "name": "create-http-log-grok-pipeline",
-      "operation-type": "put-pipeline",
-      "id": "http-log-grok-pipeline",
-      "body": {
-        "description": "Process an http log line with grok. Requires the `unparsed` data set.",
-        "processors": [
+      ]
+  }
+},
+{
+  "name": "desc_sort_with_after_timestamp",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "track_total_hits": false,
+      "query": {
+          "match_all": {}
+      },
+      "sort": [
           {
-            "grok": {
-              "field": "message",
-              "patterns": [
-                "%{IPORHOST:clientip} %{HTTPDUSER} %{USER} \\[%{TIMESTAMP_ISO8601:@timestamp}\\] \"(?:%{WORD} %{NOTSPACE:request}(?: HTTP/%{NUMBER})?|%{DATA})\" %{NUMBER:status} (?:%{NUMBER:size}|-)"
-              ]
-            }
+              "@timestamp": "desc"
           }
-        ]
-      }
-    },
-    {
-      "name": "create-http-log-geoip-pipeline",
-      "operation-type": "put-pipeline",
-      "id": "http-log-geoip-pipeline",
-      "body": {
-        "description": "Enrich the data with the geo-ip filter. Requires --opensearch-plugins='ingest-geoip'",
-        "processors": [
+      ],
+      "search_after": [
+          "1998-06-10"
+      ]
+  }
+},
+{
+  "name": "asc_sort_timestamp",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "query": {
+          "match_all": {}
+      },
+      "sort": [
           {
-            "geoip": {
-               "field": "clientip",
-               "properties": [
-                  "city_name",
-                  "country_name",
-                  "location"
-                ]
-            }
+              "@timestamp": "asc"
           }
-        ]
-      }
-    },
-    {
-      "name": "create-timestamp-pipeline",
-      "operation-type": "put-pipeline",
-      "id": "timestamp-pipeline",
-      "body": {
-        "description": "Process the timestamp out of an http log line with grok. Requires the `unparsed` data set.",
-        "processors": [
+      ]
+  }
+},
+{
+  "name": "asc_sort_with_after_timestamp",
+  "operation-type": "search",
+  "index": "logs-*",
+  "body": {
+      "track_total_hits": false,
+      "query": {
+          "match_all": {}
+      },
+      "sort": [
           {
-            "grok": {
-              "field": "message",
-              "patterns": [
-                "%{IPORHOST} %{HTTPDUSER} %{USER} \\[%{TIMESTAMP_ISO8601:@timestamp}\\] \"(?:%{WORD} %{NOTSPACE}(?: HTTP/%{NUMBER})?|%{DATA})\" %{NUMBER} (?:%{NUMBER}|-)"
-              ]
-            }
+              "@timestamp": "asc"
           }
-        ]
-      }
-    }
+      ],
+      "search_after": [
+          "1998-06-10"
+      ]
+  }
+},
+{
+  "name": "create-http-log-baseline-pipeline",
+  "operation-type": "put-pipeline",
+  "id": "http-log-baseline-pipeline",
+  "body": {
+      "description": "Process an the documents with a processor that does nothing. Baseline for overhead of pipeline.",
+      "processors": [
+          {
+              "uppercase": {
+                  "field": "doesnotexist",
+                  "ignore_missing": true
+              }
+          }
+      ]
+  }
+},
+{
+  "name": "create-http-log-grok-pipeline",
+  "operation-type": "put-pipeline",
+  "id": "http-log-grok-pipeline",
+  "body": {
+      "description": "Process an http log line with grok. Requires the `unparsed` data set.",
+      "processors": [
+          {
+              "grok": {
+                  "field": "message",
+                  "patterns": [
+                      "%{IPORHOST:clientip} %{HTTPDUSER} %{USER} \\[%{TIMESTAMP_ISO8601:@timestamp}\\] \"(?:%{WORD} %{NOTSPACE:request}(?: HTTP/%{NUMBER})?|%{DATA})\" %{NUMBER:status} (?:%{NUMBER:size}|-)"
+                  ]
+              }
+          }
+      ]
+  }
+},
+{
+  "name": "create-http-log-geoip-pipeline",
+  "operation-type": "put-pipeline",
+  "id": "http-log-geoip-pipeline",
+  "body": {
+      "description": "Enrich the data with the geo-ip filter. Requires --opensearch-plugins='ingest-geoip'",
+      "processors": [
+          {
+              "geoip": {
+                  "field": "clientip",
+                  "properties": [
+                      "city_name",
+                      "country_name",
+                      "location"
+                  ]
+              }
+          }
+      ]
+  }
+},
+{
+  "name": "create-timestamp-pipeline",
+  "operation-type": "put-pipeline",
+  "id": "timestamp-pipeline",
+  "body": {
+      "description": "Process the timestamp out of an http log line with grok. Requires the `unparsed` data set.",
+      "processors": [
+          {
+              "grok": {
+                  "field": "message",
+                  "patterns": [
+                      "%{IPORHOST} %{HTTPDUSER} %{USER} \\[%{TIMESTAMP_ISO8601:@timestamp}\\] \"(?:%{WORD} %{NOTSPACE}(?: HTTP/%{NUMBER})?|%{DATA})\" %{NUMBER} (?:%{NUMBER}|-)"
+                  ]
+              }
+          }
+      ]
+  }
+}
