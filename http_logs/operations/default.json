@@ -307,22 +307,15 @@
             "date_histogram": {
               "field": "@timestamp",
               "calendar_interval": "hour"
+            },
+            "aggs": {
+                "response_codes": {
+                    "terms": {
+                        "field": "status",
+                        "size": 100
+                    }
+                }
             }
-          },
-          "aggs": {
-              "response_codes": {
-                  "terms": {
-                      "field": "status",
-                      "size": 100
-                  },
-                  "aggs": {
-                      "sum_status": {
-                          "sum": {
-                              "field": "status"
-                          }
-                      }
-                  }
-              }
           }
         }
       }
@@ -338,22 +331,14 @@
               "date_histogram": {
                 "field": "@timestamp",
                 "calendar_interval": "month"
-              }
-            },
-            "aggs": {
+              },"aggs": {
                 "response_codes": {
                     "terms": {
                         "field": "status",
                         "size": 100
-                    },
-                    "aggs": {
-                        "sum_status": {
-                            "sum": {
-                                "field": "status"
-                            }
-                        }
                     }
                 }
+            }
             }
           }
         }
@@ -369,22 +354,15 @@
               "date_histogram": {
                 "field": "@timestamp",
                 "calendar_interval": "year"
+              },
+              "aggs": {
+                  "response_codes": {
+                      "terms": {
+                          "field": "status",
+                          "size": 100
+                      }
+                  }
               }
-            },
-            "aggs": {
-                "response_codes": {
-                    "terms": {
-                        "field": "status",
-                        "size": 100
-                    },
-                    "aggs": {
-                        "sum_status": {
-                            "sum": {
-                                "field": "status"
-                            }
-                        }
-                    }
-                }
             }
           }
         }

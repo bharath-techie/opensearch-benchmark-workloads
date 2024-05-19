@@ -16,63 +16,9 @@
           }
         },
         {
-          "operation": "200s-in-range-agg",
-          "warmup-iterations": 100,
-          "iterations": 500
-          {%- if not target_throughput %}
-          ,"target-throughput": 100
-          {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
-          {%- else %}
-          ,"target-throughput": {{ target_throughput | tojson }}
-          {%- endif %}
-          {%-if search_clients is defined and search_clients %}
-          ,"clients": {{ search_clients | tojson}}
-          {%- endif %}
-        },
-        {
-          "operation": "400s-in-range-agg",
-          "warmup-iterations": 100,
-          "iterations": 500
-          {%- if not target_throughput %}
-          ,"target-throughput": 100
-          {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
-          {%- else %}
-          ,"target-throughput": {{ target_throughput | tojson }}
-          {%- endif %}
-          {%-if search_clients is defined and search_clients %}
-          ,"clients": {{ search_clients | tojson}}
-          {%- endif %}
-        },{
-          "operation": "400s-agg",
-          "warmup-iterations": 100,
-          "iterations": 500
-        {%- if not target_throughput %}
-      ,"target-throughput": 100
-        {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
-        {%- else %}
-      ,"target-throughput": {{ target_throughput | tojson }}
-        {%- endif %}
-        {%-if search_clients is defined and search_clients %}
-      ,"clients": {{ search_clients | tojson}}
-        {%- endif %}
-      },{
-          "operation": "200s-agg",
-          "warmup-iterations": 100,
-          "iterations": 500
-        {%- if not target_throughput %}
-      ,"target-throughput": 100
-        {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
-        {%- else %}
-      ,"target-throughput": {{ target_throughput | tojson }}
-        {%- endif %}
-        {%-if search_clients is defined and search_clients %}
-      ,"clients": {{ search_clients | tojson}}
-        {%- endif %}
-      },
-        {
           "operation": "hourly_agg",
-          "warmup-iterations": 100,
-          "iterations": 500
+          "warmup-iterations": 50,
+          "iterations": 100
         {%- if not target_throughput %}
       ,"target-throughput": 100
         {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
@@ -85,8 +31,8 @@
       },
       {
         "operation": "monthly_agg",
-        "warmup-iterations": 100,
-        "iterations": 500
+        "warmup-iterations": 50,
+        "iterations": 100
       {%- if not target_throughput %}
     ,"target-throughput": 100
       {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
@@ -99,8 +45,8 @@
     },
     {
       "operation": "yearly_agg",
-      "warmup-iterations": 100, 
-      "iterations": 500
+      "warmup-iterations": 50, 
+      "iterations": 100
     {%- if not target_throughput %}
   ,"target-throughput": 100
     {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
