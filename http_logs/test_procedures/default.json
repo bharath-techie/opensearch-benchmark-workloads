@@ -82,7 +82,35 @@
         {%-if search_clients is defined and search_clients %}
       ,"clients": {{ search_clients | tojson}}
         {%- endif %}
-      }
+      },
+      {
+        "operation": "monthly_agg",
+        "warmup-iterations": 100,
+        "iterations": 500
+      {%- if not target_throughput %}
+    ,"target-throughput": 100
+      {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
+      {%- else %}
+    ,"target-throughput": {{ target_throughput | tojson }}
+      {%- endif %}
+      {%-if search_clients is defined and search_clients %}
+    ,"clients": {{ search_clients | tojson}}
+      {%- endif %}
+    },
+    {
+      "operation": "yearly_agg",
+      "warmup-iterations": 100,
+      "iterations": 500
+    {%- if not target_throughput %}
+  ,"target-throughput": 100
+    {%- elif target_throughput is string and target_throughput.lower() == 'none' %}
+    {%- else %}
+  ,"target-throughput": {{ target_throughput | tojson }}
+    {%- endif %}
+    {%-if search_clients is defined and search_clients %}
+  ,"clients": {{ search_clients | tojson}}
+    {%- endif %}
+  }
       ]
     },
     {

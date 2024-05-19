@@ -175,13 +175,13 @@
     {
       "name": "400s-in-range-agg",
       "operation-type": "search",
-      "index": "elb*",
+      "index": "logs*",
       "body": {
         "size": 0,
         "query": {
           "startree": {
             "groupby": [
-              "elb_status"
+              "status"
             ],
             "filter": [
               {
@@ -189,7 +189,7 @@
                   "should": [
                     {
                       "term": {
-                        "elb_status": "404"
+                        "status": "404"
                       }
                     },
                     {
@@ -207,10 +207,10 @@
           "abc": {
             "startree": {
               "groupby": [
-                "elb_status"
+                "status"
               ],
               "metrics": [
-                "elb_status_sum"
+                "status_sum"
               ]
             }
           }
@@ -220,13 +220,13 @@
     {
       "name": "200s-in-range-agg",
       "operation-type": "search",
-      "index": "elb*",
+      "index": "logs*",
       "body": {
         "size": 0,
         "query": {
           "startree": {
             "groupby": [
-              "elb_status"
+              "status"
             ],
             "filter": [
               {
@@ -234,7 +234,7 @@
                   "should": [
                     {
                       "term": {
-                        "elb_status": "200"
+                        "status": "200"
                       }
                     },
                     {
@@ -252,10 +252,10 @@
           "abc": {
             "startree": {
               "groupby": [
-                "elb_status"
+                "status"
               ],
               "metrics": [
-                "elb_status_sum"
+                "status_sum"
               ]
             }
           }
@@ -265,13 +265,13 @@
     {
       "name": "400s-agg",
       "operation-type": "search",
-      "index": "elb*",
+      "index": "logs*",
       "body": {
         "size": 0,
         "query": {
           "startree": {
             "groupby": [
-              "elb_status"
+              "status"
             ],
             "filter": [
               {
@@ -279,7 +279,7 @@
                   "should": [
                     {
                       "term": {
-                        "elb_status": "404"
+                        "status": "404"
                       }
                     }
                   ]
@@ -292,10 +292,10 @@
           "abc": {
             "startree": {
               "groupby": [
-                "elb_status"
+                "status"
               ],
               "metrics": [
-                "elb_status_sum"
+                "status_sum"
               ]
             }
           }
@@ -305,13 +305,13 @@
     {
       "name": "200s-agg",
       "operation-type": "search",
-      "index": "elb*",
+      "index": "logs*",
       "body": {
         "size": 0,
         "query": {
           "startree": {
             "groupby": [
-              "elb_status"
+              "status"
             ],
             "filter": [
               {
@@ -319,7 +319,7 @@
                   "should": [
                     {
                       "term": {
-                        "elb_status": "200"
+                        "status": "200"
                       }
                     }
                   ]
@@ -332,10 +332,10 @@
           "abc": {
             "startree": {
               "groupby": [
-                "elb_status"
+                "status"
               ],
               "metrics": [
-                "elb_status_sum"
+                "status_sum"
               ]
             }
           }
@@ -345,12 +345,12 @@
     {
       "name": "hourly_agg",
       "operation-type": "search",
-      "index": "elb-*",
+      "index": "logs*",
       "body": {
     "query": {
     "startree": {
     "groupby": [
-    "elb_status",
+    "status",
     "hour"
     ]
     }
@@ -360,17 +360,75 @@
     "abc": {
     "startree": {
     "groupby": [
-    "elb_status",
+    "status",
     "hour"
     ],
     "metrics": [
-    "elb_status_sum"
+    "status_sum"
     ]
     }
     }
     }
       }
     },
+    {
+        "name": "monthly_agg",
+        "operation-type": "search",
+        "index": "logs*",
+        "body": {
+      "query": {
+      "startree": {
+      "groupby": [
+      "status",
+      "month"
+      ]
+      }
+      },
+      "size": 0,
+      "aggs": {
+      "abc": {
+      "startree": {
+      "groupby": [
+      "status",
+      "month"
+      ],
+      "metrics": [
+      "status_sum"
+      ]
+      }
+      }
+      }
+        }
+      },
+      {
+        "name": "yearly_agg",
+        "operation-type": "search",
+        "index": "logs*",
+        "body": {
+      "query": {
+      "startree": {
+      "groupby": [
+      "status",
+      "year"
+      ]
+      }
+      },
+      "size": 0,
+      "aggs": {
+      "abc": {
+      "startree": {
+      "groupby": [
+      "status",
+      "year"
+      ],
+      "metrics": [
+      "status_sum"
+      ]
+      }
+      }
+      }
+        }
+      },
     {
       "name": "hourly_agg-1",
       "operation-type": "search",
