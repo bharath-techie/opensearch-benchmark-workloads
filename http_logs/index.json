@@ -9,6 +9,41 @@
     "_source": {
       "enabled": {{ source_enabled | default(true) | tojson }}
     },
+"composite": {
+"startree1": {
+"type": "star_tree",
+"config": {
+"ordered_dimensions": [
+{
+"name": "@timestamp",
+"calendar_intervals": [
+"day",
+"month"
+]
+},
+{
+"name": "status"
+}
+],
+"metrics": [
+{
+"name": "size",
+"stats": [
+"sum",
+"count"
+]
+},
+{
+"name": "status",
+"stats": [
+"sum",
+"count"
+]
+}
+]
+}
+}
+},
     "properties": {
       "@timestamp": {
         "format": "strict_date_optional_time||epoch_second",
