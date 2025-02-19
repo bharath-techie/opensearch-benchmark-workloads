@@ -72,41 +72,41 @@
             "compressed-bytes": 47290776,
             "uncompressed-bytes": 1088378738
           },
-          {
-            "target-index": "logs-201998",
-            "source-file": "documents-201998.unparsed.json.bz2",
-            "document-count": 13053463,
-            "compressed-bytes": 63278452,
-            "uncompressed-bytes": 1456836090
-          },
-          {
-            "target-index": "logs-211998",
-            "source-file": "documents-211998.unparsed.json.bz2",
-            "document-count": 17647279,
-            "compressed-bytes": 85739523,
-            "uncompressed-bytes": 1975990671
-          },
-          {
-            "target-index": "logs-221998",
-            "source-file": "documents-221998.unparsed.json.bz2",
-            "document-count": 10716760,
-            "compressed-bytes": 53264421,
-            "uncompressed-bytes": 1202551382
-          },
-          {
-            "target-index": "logs-231998",
-            "source-file": "documents-231998.unparsed.json.bz2",
-            "document-count": 11961342,
-            "compressed-bytes": 60795929,
-            "uncompressed-bytes": 1334381144
-          },
-          {
-            "target-index": "logs-241998",
-            "source-file": "documents-241998.unparsed.json.bz2",
-            "document-count": 181463624,
-            "compressed-bytes": 899190175,
-            "uncompressed-bytes": 20563705716
-          }
+{
+"target-index": "logs-201998",
+"source-file": "documents-201998.unparsed.json.bz2",
+"document-count": 13053463,
+"compressed-bytes": 63278452,
+"uncompressed-bytes": 1456836090
+},
+{
+"target-index": "logs-211998",
+"source-file": "documents-211998.unparsed.json.bz2",
+"document-count": 17647279,
+"compressed-bytes": 85739523,
+"uncompressed-bytes": 1975990671
+},
+{
+"target-index": "logs-221998",
+"source-file": "documents-221998.unparsed.json.bz2",
+"document-count": 10716760,
+"compressed-bytes": 53264421,
+"uncompressed-bytes": 1202551382
+},
+{
+"target-index": "logs-231998",
+"source-file": "documents-231998.unparsed.json.bz2",
+"document-count": 11961342,
+"compressed-bytes": 60795929,
+"uncompressed-bytes": 1334381144
+},
+{
+"target-index": "logs-241998",
+"source-file": "documents-241998.unparsed.json.bz2",
+"document-count": 181463624,
+"compressed-bytes": 899190175,
+"uncompressed-bytes": 20563705716
+}
         ]
       }
     {%- else %}
