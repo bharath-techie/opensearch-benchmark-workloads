@@ -9,7 +9,7 @@
   "indices": [
     {
       "name": "{{ index_name | default('big5') }}",
-      "body": "{{ index_body | default('index.json') }}"
+      "body": "{{ index_body | default('index-startree.json') }}"
     }
   ],
   "corpora": [
