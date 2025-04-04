@@ -4,7 +4,8 @@
     "index.number_of_replicas": 0,
     "index.requests.cache.enable": false,
     "index.composite_index": true,
-    "index.translog.flush_threshold_size": "512mb"
+    "index.translog.flush_threshold_size": "512mb",
+    "index.append_only.enabled": true
   },
   "mappings": {
     "_source": {
@@ -142,7 +143,8 @@
         "type": "keyword"
       },
       "mta_tax": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "rate_code_id": {
         "type": "keyword"
@@ -155,16 +157,18 @@
         "format": "yyyy-MM-dd HH:mm:ss"
       },
       "tolls_amount": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "tip_amount": {
-        "type": "float"
+        "type": "half_float"
       },
       "payment_type": {
         "type": "keyword"
       },
       "extra": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "vendor_id": {
         "type": "keyword"
@@ -173,13 +177,16 @@
         "type": "keyword"
       },
       "improvement_surcharge": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "fare_amount": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "ehail_fee": {
-        "type": "float"
+        "scaling_factor": 100,
+        "type": "scaled_float"
       },
       "cab_color": {
         "type": "keyword"
@@ -193,9 +200,10 @@
       "total_amount": {
         "type": "float"
       },
-      "trip_distance": {
-        "type": "float"
-      },
+      "trip_distance": {%- if trip_distance_mapping is defined %} {{ trip_distance_mapping | tojson }} {%- else %} {
+        "scaling_factor": 100,
+        "type": "scaled_float"
+      }{%- endif %},
       "pickup_location": {
         "type": "geo_point"
       }

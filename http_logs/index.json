@@ -4,7 +4,8 @@
 "index.number_of_replicas": {{ number_of_replicas | default(0) }},
 "index.requests.cache.enable": false,
 "index.composite_index": true,
-"index.refresh_interval": "60s"
+"index.refresh_interval": "60s",
+        "index.append_only.enabled": true
 },
 "mappings": {
 "dynamic": "strict",
