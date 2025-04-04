@@ -1,18 +1,139 @@
 {
   "settings": {
-    "index.number_of_shards": {{number_of_shards | default(1)}},
-    "index.number_of_replicas": {{number_of_replicas | default(0)}},
-    "index.queries.cache.enabled": {{query_cache_enabled | default(false) | tojson}},
-    "index.requests.cache.enable": {{requests_cache_enabled | default(false) | tojson}}
+    "index.number_of_shards": 5,
+    "index.number_of_replicas": 1,
+    "index.requests.cache.enable": false,
+    "index.composite_index": true,
+    "index.translog.flush_threshold_size": "512mb",
+    "index.append_only.enabled": true
   },
   "mappings": {
     "_source": {
       "enabled": {{ source_enabled | default(true) | tojson }}
     },
+    "composite": {
+      "startree1": {
+        "type": "star_tree",
+        "config": {
+          "date_dimension": {
+            "name": "dropoff_datetime",
+            "calendar_intervals": [
+              "minute",
+              "half-hour"
+            ]
+          },
+          "ordered_dimensions": [
+            {
+              "name": "passenger_count"
+            }
+          ],
+          "metrics": [
+            {
+              "name": "tolls_amount",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "surcharge",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "mta_tax",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "passenger_count",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "tip_amount",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "extra",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "improvement_surcharge",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "fare_amount",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "ehail_fee",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "total_amount",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            },
+            {
+              "name": "trip_distance",
+              "stats": [
+                "sum",
+                "value_count",
+                "min",
+                "max"
+              ]
+            }
+          ]
+        }
+      }
+    },
     "properties": {
       "surcharge": {
-        "scaling_factor": 100,
-        "type": "scaled_float"
+        "type": "float"
       },
       "dropoff_datetime": {
         "type": "date",
@@ -77,17 +198,16 @@
         "type": "text"
       },
       "total_amount": {
-        "scaling_factor": 100,
-        "type": "scaled_float"
+        "type": "float"
       },
       "trip_distance": {%- if trip_distance_mapping is defined %} {{ trip_distance_mapping | tojson }} {%- else %} {
-        "scaling_factor": 100,
-        "type": "scaled_float"
-      }{%- endif %},
-      "pickup_location": {
-        "type": "geo_point"
-      }
-    },
-    "dynamic": "strict"
-  }
+"scaling_factor": 100,
+"type": "scaled_float"
+}{%- endif %},
+"pickup_location": {
+"type": "geo_point"
+}
+},
+"dynamic": "strict"
+}
 }
